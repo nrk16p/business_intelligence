@@ -8,22 +8,18 @@ pipeline {
             }
         }
 
-        stage('Setup Virtualenv') {
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                '''
+                sh 'docker build -t flask-app:latest .'
             }
         }
 
-        stage('Run App') {
+        stage('Deploy Container') {
             steps {
                 sh '''
-                . venv/bin/activate
-                nohup python app.py > flask.log 2>&1 &
+                docker stop flask-app || true
+                docker rm flask-app || true
+                docker run -d -p 5011:5011 --name flask-app flask-app:latest
                 '''
             }
         }
