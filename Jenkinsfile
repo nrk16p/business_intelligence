@@ -8,15 +8,23 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Virtualenv') {
             steps {
-                sh 'pip3 install --no-cache-dir -r requirements.txt'
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run App') {
             steps {
-                sh 'nohup python3 app.py > flask.log 2>&1 &'
+                sh '''
+                . venv/bin/activate
+                nohup python app.py > flask.log 2>&1 &
+                '''
             }
         }
     }
