@@ -10,13 +10,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh 'pip3 install --no-cache-dir -r requirements.txt'
             }
         }
 
         stage('Run App') {
             steps {
-                sh 'python3 app.py &'
+                sh 'nohup python3 app.py > flask.log 2>&1 &'
             }
         }
     }
