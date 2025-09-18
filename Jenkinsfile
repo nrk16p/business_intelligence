@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'python:3.12-slim' }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -12,13 +10,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install --no-cache-dir -r requirements.txt'
+                sh 'pip3 install -r requirements.txt'
             }
         }
 
         stage('Run App') {
             steps {
-                sh 'python app.py &'
+                sh 'python3 app.py &'
             }
         }
     }
